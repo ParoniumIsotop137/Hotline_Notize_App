@@ -184,8 +184,39 @@ public class HotlineAppHotlineTable extends JDialog {
 
 	}
 
-	protected void EditSelectedRow() {
-		// TODO Auto-generated method stub
+	private void EditSelectedRow() {
+		if(tblHotlineData.getSelectedRow() != -1) {
+			
+			DataChangingWindow dataWindow = new DataChangingWindow(hotlineData.get(tblHotlineData.getSelectedRow()));
+			dataWindow.setVisible(true);
+			
+			if(dataWindow.isResult()) {
+				
+				HotlineData data = dataWindow.getData();
+				
+				hotlineData.get(tblHotlineData.getSelectedRow()).setClosedFrom(data.getClosedFrom());
+				hotlineData.get(tblHotlineData.getSelectedRow()).setLineNumber(data.getLineNumber());
+				hotlineData.get(tblHotlineData.getSelectedRow()).setLocalizationNumber(data.getLocalizationNumber());
+				hotlineData.get(tblHotlineData.getSelectedRow()).setOpenedFrom(data.getOpenedFrom());
+				hotlineData.get(tblHotlineData.getSelectedRow()).setPhoneNumber(data.getPhoneNumber());
+				hotlineData.get(tblHotlineData.getSelectedRow()).setSdNumber(data.getSdNumber());
+				hotlineData.get(tblHotlineData.getSelectedRow()).setTechnicianName(data.getTechnicianName());
+				
+				model.setValueAt(("SD"+data.getSdNumber()), tblHotlineData.getSelectedRow(), 1);
+				model.setValueAt(data.getOpenedFrom(), tblHotlineData.getSelectedRow(), 2);
+				model.setValueAt(data.getTechnicianName(), tblHotlineData.getSelectedRow(), 3);
+				model.setValueAt(data.getPhoneNumber(), tblHotlineData.getSelectedRow(), 4);
+				model.setValueAt(data.getLocalizationNumber(), tblHotlineData.getSelectedRow(), 5);
+				model.setValueAt(data.getLineNumber(), tblHotlineData.getSelectedRow(), 6);
+				model.setValueAt(data.getClosedFrom(), tblHotlineData.getSelectedRow(), 7);
+				
+				JOptionPane.showMessageDialog(frmTableWindow, "Sikeres módosítás!", "Módosítás", JOptionPane.INFORMATION_MESSAGE);
+			}
+			
+		}
+		else {
+			JOptionPane.showMessageDialog(frmTableWindow, "Jelölj ki egy sort a módosításhoz!", "Hiba", JOptionPane.ERROR_MESSAGE);
+		}
 
 	}
 
