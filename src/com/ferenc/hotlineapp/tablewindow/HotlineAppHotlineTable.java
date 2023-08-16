@@ -33,6 +33,7 @@ public class HotlineAppHotlineTable extends JDialog {
 	private DefaultTableModel model;
 	private List<HotlineData> hotlineData;
 	private String staffName;
+	private TableDataSaver saver;
 
 	/**
 	 * Launch the application.
@@ -47,7 +48,8 @@ public class HotlineAppHotlineTable extends JDialog {
 
 	/**
 	 * Initialize the contents of the frame.
-	 * @param staffName 
+	 * 
+	 * @param staffName
 	 */
 	private void initialize(String staffName) {
 
@@ -58,8 +60,9 @@ public class HotlineAppHotlineTable extends JDialog {
 		frmTableWindow.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		frmTableWindow.getContentPane().setLayout(null);
 		this.staffName = staffName;
-		
-		frmTableWindow.setIconImage(Toolkit.getDefaultToolkit().getImage(DataChangingWindow.class.getResource("/images/phone.png")));
+
+		frmTableWindow.setIconImage(
+				Toolkit.getDefaultToolkit().getImage(DataChangingWindow.class.getResource("/images/phone.png")));
 
 		hotlineData = new ArrayList<HotlineData>();
 
@@ -144,9 +147,9 @@ public class HotlineAppHotlineTable extends JDialog {
 		JMenuItem mtmSaveAll = new JMenuItem("Összes mentése");
 		mtmSaveAll.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+
 				SaveAllDataToFile();
-				
+
 			}
 		});
 		mtmSaveAll.setFont(new Font("Segoe UI", Font.ITALIC, 13));
@@ -157,43 +160,49 @@ public class HotlineAppHotlineTable extends JDialog {
 		JMenuItem mtmSaveOwnData = new JMenuItem("Saját hívások mentése");
 		mtmSaveOwnData.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+
 				SaveOwnDataToFile();
-				
+
 			}
 		});
 		mtmSaveOwnData.setFont(new Font("Segoe UI", Font.ITALIC, 13));
 		mtmSaveOwnData.setBackground(new Color(240, 255, 255));
 		mtmSaveOwnData.setForeground(new Color(0, 0, 128));
 		mnFileHandling.add(mtmSaveOwnData);
-
-	}
-
-	protected void SaveOwnDataToFile() {
-		// TODO Auto-generated method stub
 		
+		saver = new TableDataSaver();
+
 	}
 
-	protected void SaveAllDataToFile() {
-		// TODO Auto-generated method stub
+	private void SaveOwnDataToFile() {
 		
+		saver.SaveOwnData(hotlineData);
+
 	}
 
-	protected void DeleteSelectedRow() {
-		// TODO Auto-generated method stub
+	private void SaveAllDataToFile() {
+		
+		saver.SaveAllData(hotlineData);
+
+	}
+
+	private void DeleteSelectedRow() {
+		
+		hotlineData.remove(tblHotlineData.getSelectedRow());
+		model.removeRow(tblHotlineData.getSelectedRow());
 
 	}
 
 	private void EditSelectedRow() {
-		if(tblHotlineData.getSelectedRow() != -1) {
-			
+		if (tblHotlineData.getSelectedRow() != -1) {
+
 			DataChangingWindow dataWindow = new DataChangingWindow(hotlineData.get(tblHotlineData.getSelectedRow()));
 			dataWindow.setVisible(true);
-			
-			if(dataWindow.isResult()) {
-				
+
+			if (dataWindow.isResult()) {
+
 				HotlineData data = dataWindow.getData();
-				
+
 				hotlineData.get(tblHotlineData.getSelectedRow()).setClosedFrom(data.getClosedFrom());
 				hotlineData.get(tblHotlineData.getSelectedRow()).setLineNumber(data.getLineNumber());
 				hotlineData.get(tblHotlineData.getSelectedRow()).setLocalizationNumber(data.getLocalizationNumber());
@@ -201,21 +210,22 @@ public class HotlineAppHotlineTable extends JDialog {
 				hotlineData.get(tblHotlineData.getSelectedRow()).setPhoneNumber(data.getPhoneNumber());
 				hotlineData.get(tblHotlineData.getSelectedRow()).setSdNumber(data.getSdNumber());
 				hotlineData.get(tblHotlineData.getSelectedRow()).setTechnicianName(data.getTechnicianName());
-				
-				model.setValueAt(("SD"+data.getSdNumber()), tblHotlineData.getSelectedRow(), 1);
+
+				model.setValueAt(("SD" + data.getSdNumber()), tblHotlineData.getSelectedRow(), 1);
 				model.setValueAt(data.getOpenedFrom(), tblHotlineData.getSelectedRow(), 2);
 				model.setValueAt(data.getTechnicianName(), tblHotlineData.getSelectedRow(), 3);
 				model.setValueAt(data.getPhoneNumber(), tblHotlineData.getSelectedRow(), 4);
 				model.setValueAt(data.getLocalizationNumber(), tblHotlineData.getSelectedRow(), 5);
 				model.setValueAt(data.getLineNumber(), tblHotlineData.getSelectedRow(), 6);
 				model.setValueAt(data.getClosedFrom(), tblHotlineData.getSelectedRow(), 7);
-				
-				JOptionPane.showMessageDialog(frmTableWindow, "Sikeres módosítás!", "Módosítás", JOptionPane.INFORMATION_MESSAGE);
+
+				JOptionPane.showMessageDialog(frmTableWindow, "Sikeres módosítás!", "Módosítás",
+						JOptionPane.INFORMATION_MESSAGE);
 			}
-			
-		}
-		else {
-			JOptionPane.showMessageDialog(frmTableWindow, "Jelölj ki egy sort a módosításhoz!", "Hiba", JOptionPane.ERROR_MESSAGE);
+
+		} else {
+			JOptionPane.showMessageDialog(frmTableWindow, "Jelölj ki egy sort a módosításhoz!", "Hiba",
+					JOptionPane.ERROR_MESSAGE);
 		}
 
 	}
@@ -235,10 +245,11 @@ public class HotlineAppHotlineTable extends JDialog {
 		if (this.hotlineData != null) {
 
 			for (HotlineData data : hotlineData) {
-				
-				String date = data.getDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(Locale.GERMANY));
 
-				Object[] line = new Object[] { date, ("SD"+data.getSdNumber()), data.getOpenedFrom(),
+				String date = data.getDate()
+						.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(Locale.GERMANY));
+
+				Object[] line = new Object[] { date, ("SD" + data.getSdNumber()), data.getOpenedFrom(),
 						data.getTechnicianName(), data.getPhoneNumber(), data.getLocalizationNumber(),
 						data.getLineNumber(), data.getClosedFrom() };
 
@@ -272,26 +283,28 @@ public class HotlineAppHotlineTable extends JDialog {
 	}
 
 	private void AddNewRow() {
-		
+
 		DataChangingWindow dataWindow = new DataChangingWindow();
 		dataWindow.setVisible(true);
-		
-		if(dataWindow.isResult()) {
-			
+
+		if (dataWindow.isResult()) {
+
 			HotlineData data = dataWindow.getData();
-		
-			String date = data.getDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(Locale.GERMANY));
-			
-			Object[] line = new Object[] { date, ("SD"+data.getSdNumber()), data.getOpenedFrom(),
-					data.getTechnicianName(), data.getPhoneNumber(), data.getLocalizationNumber(),
-					data.getLineNumber(), data.getClosedFrom() };
-			
+
+			String date = data.getDate()
+					.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(Locale.GERMANY));
+
+			Object[] line = new Object[] { date, ("SD" + data.getSdNumber()), data.getOpenedFrom(),
+					data.getTechnicianName(), data.getPhoneNumber(), data.getLocalizationNumber(), data.getLineNumber(),
+					data.getClosedFrom() };
+
 			model.addRow(line);
-			
+
 			hotlineData.add(data);
-			
-			JOptionPane.showMessageDialog(frmTableWindow, "Az új hívás sikeresen rögzítésre került!", "Mentés", JOptionPane.INFORMATION_MESSAGE);
-			
+
+			JOptionPane.showMessageDialog(frmTableWindow, "Az új hívás sikeresen rögzítésre került!", "Mentés",
+					JOptionPane.INFORMATION_MESSAGE);
+
 		}
 
 	}
