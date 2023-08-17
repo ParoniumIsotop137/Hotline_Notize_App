@@ -68,9 +68,9 @@ public class HotlineAppMainWindow implements ActionListener {
 	private JTextField txtPhoneNr;
 	private JPopupMenu menuIcinga;
 	private JPopupMenu menuDavin;
-	private String staffName;
+	private static String staffName;
 
-	public String getStaffName() {
+	public static String getStaffName() {
 		return staffName;
 	}
 
@@ -91,8 +91,9 @@ public class HotlineAppMainWindow implements ActionListener {
 
 		if (loginFRame.getName() != null && !loginFRame.getName().isEmpty() && !loginFRame.getName().isBlank()) {
 
-			initialize();
+			
 			staffName = loginFRame.getStaffName();
+			initialize();
 			mainFrame.setTitle(mainFrame.getTitle() + " Üdv.: " + staffName);
 			
 		} else {
@@ -377,7 +378,7 @@ public class HotlineAppMainWindow implements ActionListener {
 		mainFrame.getContentPane().add(lblBackground);
 
 		hotlineData = null;
-		tableWindow = new HotlineAppHotlineTable(staffName);
+		tableWindow = new HotlineAppHotlineTable();
 
 	}
 

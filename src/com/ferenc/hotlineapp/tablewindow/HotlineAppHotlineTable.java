@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -16,12 +17,15 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import com.ferenc.hotlineapp.datawindow.DataChangingWindow;
+import com.ferenc.hotlineapp.mainwindow.HotlineAppMainWindow;
 import com.ferenc.hotlineapp.mainwindow.HotlineData;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.awt.event.ActionEvent;
@@ -32,8 +36,8 @@ public class HotlineAppHotlineTable extends JDialog {
 	private JTable tblHotlineData;
 	private DefaultTableModel model;
 	private List<HotlineData> hotlineData;
-	private String staffName;
 	private TableDataSaver saver;
+	private String staffname;
 
 	/**
 	 * Launch the application.
@@ -42,8 +46,8 @@ public class HotlineAppHotlineTable extends JDialog {
 	/**
 	 * Create the application.
 	 */
-	public HotlineAppHotlineTable(String staffName) {
-		initialize(staffName);
+	public HotlineAppHotlineTable() {
+		initialize();
 	}
 
 	/**
@@ -51,15 +55,15 @@ public class HotlineAppHotlineTable extends JDialog {
 	 * 
 	 * @param staffName
 	 */
-	private void initialize(String staffName) {
+	private void initialize() {
 
 		this.setModal(true);
 		frmTableWindow = new JFrame();
 		frmTableWindow.setBackground(new Color(0, 0, 139));
-		frmTableWindow.setBounds(700, 100, 800, 500);
+		frmTableWindow.setBounds(700, 100, 800, 700);
 		frmTableWindow.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		frmTableWindow.getContentPane().setLayout(null);
-		this.staffName = staffName;
+		
 
 		frmTableWindow.setIconImage(
 				Toolkit.getDefaultToolkit().getImage(DataChangingWindow.class.getResource("/images/phone.png")));
@@ -67,13 +71,13 @@ public class HotlineAppHotlineTable extends JDialog {
 		hotlineData = new ArrayList<HotlineData>();
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(0, 0, 786, 495);
+		scrollPane.setBounds(0, 0, 786, 695);
 		frmTableWindow.getContentPane().add(scrollPane);
 
 		tblHotlineData = new JTable();
 		tblHotlineData.setForeground(new Color(0, 0, 139));
 		tblHotlineData.setBackground(new Color(255, 255, 224));
-		tblHotlineData.setFont(new Font("Segoe Print", Font.PLAIN, 13));
+		tblHotlineData.setFont(new Font("Segoe Print", Font.PLAIN, 12));
 
 		scrollPane.setViewportView(tblHotlineData);
 
@@ -170,19 +174,60 @@ public class HotlineAppHotlineTable extends JDialog {
 		mtmSaveOwnData.setForeground(new Color(0, 0, 128));
 		mnFileHandling.add(mtmSaveOwnData);
 		
+		staffname = HotlineAppMainWindow.getStaffName();
 		saver = new TableDataSaver();
 
 	}
 
 	private void SaveOwnDataToFile() {
 		
-		saver.SaveOwnData(hotlineData);
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("*.csv", "csv");
+		JFileChooser chooser = new JFileChooser();
+		
+		String desktopPath = System.getProperty("user.home") + File.separator +"Desktop";
+		chooser.setCurrentDirectory(new File(desktopPath));
+		chooser.setApproveButtonText("Mentés");
+		chooser.setDialogTitle("Mentés");
+		chooser.setFileFilter(filter);
+		
+		
+		int value = chooser.showSaveDialog(frmTableWindow);
+		
+		if(value == JFileChooser.APPROVE_OPTION) {
+			
+			File name = chooser.getSelectedFile();
+			
+			saver.SaveOwnData(hotlineData, name, staffname);
+			
+		}
+		
+		
+		
 
 	}
 
 	private void SaveAllDataToFile() {
 		
-		saver.SaveAllData(hotlineData);
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("*.csv", "csv");
+		JFileChooser chooser = new JFileChooser();
+		
+		String desktopPath = System.getProperty("user.home") + File.separator +"Desktop";
+		chooser.setCurrentDirectory(new File(desktopPath));
+		chooser.setApproveButtonText("Mentés");
+		chooser.setDialogTitle("Mentés");
+		chooser.setFileFilter(filter);
+		
+		
+		int value = chooser.showSaveDialog(frmTableWindow);
+		
+		if(value == JFileChooser.APPROVE_OPTION) {
+			
+			File name = chooser.getSelectedFile();
+			
+			saver.SaveAllData(hotlineData, name);
+		}
+		
+		
 
 	}
 
