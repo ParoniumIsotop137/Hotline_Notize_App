@@ -17,7 +17,7 @@ public class TableDataSaver {
 
 	private String sep = ";";
 
-	private String header = "Dátum;Jegyszám;Jegyet nyitotta;Technikus neve;Telefonszáma;Standort;Linie;Hibás eset;Jegyet zárta";
+	private String header = "Dátum;Jegyszám;Jegyet nyitotta;Technikus neve;Telefonszáma;Standort;Linie;Jegyet zárta";
 
 	public void SaveAllData(List<HotlineData> hotlineData, File fileName) {
 
@@ -32,7 +32,7 @@ public class TableDataSaver {
 
 				String text = date + sep + "SD" + String.valueOf(data.getSdNumber() + sep + data.getOpenedFrom() + sep
 						+ data.getTechnicianName() + sep + data.getPhoneNumber() + sep + data.getLocalizationNumber()
-						+ sep + String.valueOf(data.getLineNumber())+ sep + "" + sep + data.getClosedFrom());
+						+ sep + String.valueOf(data.getLineNumber()) + sep + data.getClosedFrom());
 
 				fw.write(text + "\n");
 			}
@@ -64,7 +64,7 @@ public class TableDataSaver {
 							+ String.valueOf(
 									data.getSdNumber() + sep + data.getOpenedFrom() + sep + data.getTechnicianName()
 											+ sep + data.getPhoneNumber() + sep + data.getLocalizationNumber() + sep
-											+ String.valueOf(data.getLineNumber())+ sep + "" + sep + data.getClosedFrom());
+											+ String.valueOf(data.getLineNumber()) + sep + data.getClosedFrom());
 
 					fw.write(text + "\n");
 
