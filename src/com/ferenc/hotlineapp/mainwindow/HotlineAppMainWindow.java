@@ -28,6 +28,8 @@ import com.ferenc.hotlineapp.datawindow.DataChangingWindow;
 import com.ferenc.hotlineapp.login.HotlineAppLoginFrame;
 import com.ferenc.hotlineapp.mainwindow.function.MainWindowFunctions;
 import com.ferenc.hotlineapp.tablewindow.HotlineAppHotlineTable;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class HotlineAppMainWindow implements ActionListener {
 
@@ -85,7 +87,7 @@ public class HotlineAppMainWindow implements ActionListener {
 	 * /** Create the application.
 	 */
 	public HotlineAppMainWindow() {
-
+		
 		HotlineAppLoginFrame loginFRame = new HotlineAppLoginFrame();
 		loginFRame.setVisible(true);
 
@@ -99,7 +101,8 @@ public class HotlineAppMainWindow implements ActionListener {
 		} else {
 			System.exit(0);
 		}
-
+		
+		
 	}
 
 	/**
@@ -108,10 +111,27 @@ public class HotlineAppMainWindow implements ActionListener {
 	private void initialize() {
 
 		mainFrame = new JFrame();
+		mainFrame.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				
+				Object[] option = new Object[] { "Igen", "Mégsem" };
+
+				if (JOptionPane.showOptionDialog(mainFrame, "Minden, Excell fájlba ki nem mentett adatt elvész az alkalmazás bezárásával. Biztosan ki akarsz lépni?",
+						"Kilépés megerősítése", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, option,
+						option[1]) == JOptionPane.YES_OPTION) {
+					
+					System.exit(0);
+					
+				}
+				
+				
+			}
+		});
 		mainFrame.setTitle("Hotline segéd");
 		mainFrame.setFont(new Font("Segoe UI", Font.BOLD, 15));
 		mainFrame.setBounds(100, 100, 600, 680);
-		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		mainFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		mainFrame.setResizable(false);
 		mainFrame.getContentPane().setLayout(null);
 
