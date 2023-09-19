@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -91,11 +93,10 @@ public class HotlineAppMainWindow implements ActionListener {
 
 		if (loginFRame.getName() != null && !loginFRame.getName().isEmpty() && !loginFRame.getName().isBlank()) {
 
-			
 			staffName = loginFRame.getStaffName();
 			initialize();
 			mainFrame.setTitle(mainFrame.getTitle() + " Üdv.: " + staffName);
-			
+
 		} else {
 			System.exit(0);
 		}
@@ -111,13 +112,28 @@ public class HotlineAppMainWindow implements ActionListener {
 		mainFrame.setTitle("Hotline segéd");
 		mainFrame.setFont(new Font("Segoe UI", Font.BOLD, 15));
 		mainFrame.setBounds(100, 100, 600, 680);
-		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		mainFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		mainFrame.setResizable(false);
 		mainFrame.getContentPane().setLayout(null);
 
 		mainFrame.setIconImage(
 				Toolkit.getDefaultToolkit().getImage(DataChangingWindow.class.getResource("/images/phone.png")));
 
+		mainFrame.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+
+				Object[] options = new Object[] { "Igen", "Nem" };
+
+				if (JOptionPane.showOptionDialog(mainFrame, "Az alkalmazás bezárásával minden fájlba le nem mentett adat elvész! Biztosan kilépsz?", "Biztosan ki akarsz lépni?",
+						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options,
+						options[1]) == JOptionPane.YES_OPTION) {
+					System.exit(0);
+				}
+
+			}
+
+		});
 		functions = new MainWindowFunctions();
 
 		btnShowTableWindow = new JButton("Táblázat mutatása");
@@ -198,7 +214,8 @@ public class HotlineAppMainWindow implements ActionListener {
 		cmbLinie.setBackground(new Color(240, 255, 255));
 		cmbLinie.setForeground(new Color(255, 0, 0));
 		cmbLinie.setFont(new Font("Segoe UI Black", Font.BOLD, 13));
-		cmbLinie.setModel(new DefaultComboBoxModel(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9" }));
+		cmbLinie.setModel(new DefaultComboBoxModel(
+				new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15" }));
 		cmbLinie.setBounds(174, 440, 60, 30);
 		mainFrame.getContentPane().add(cmbLinie);
 

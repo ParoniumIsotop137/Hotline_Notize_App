@@ -141,7 +141,7 @@ public class DataChangingWindow extends JDialog {
 		cmbLineNumber = new JComboBox();
 		cmbLineNumber.setBackground(new Color(255, 255, 224));
 		cmbLineNumber.setForeground(new Color(0, 0, 139));
-		cmbLineNumber.setModel(new DefaultComboBoxModel(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9" }));
+		cmbLineNumber.setModel(new DefaultComboBoxModel(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12","13", "14", "15" }));
 		cmbLineNumber.setFont(new Font("Microsoft YaHei UI", Font.BOLD, 13));
 		cmbLineNumber.setBounds(165, 280, 45, 30);
 		getContentPane().add(cmbLineNumber);
@@ -209,7 +209,7 @@ public class DataChangingWindow extends JDialog {
 		txtNameOfTechnician.setText(data.getTechnicianName());
 		txtPhoneNumber.setText(data.getPhoneNumber());
 		txtLocationNumber.setText(data.getLocalizationNumber());
-		cmbLineNumber.setSelectedItem(data.getLineNumber());
+		cmbLineNumber.setSelectedItem(String.valueOf(data.getLineNumber()));
 		txtClosedFrom.setText(data.getClosedFrom());
 
 	}
