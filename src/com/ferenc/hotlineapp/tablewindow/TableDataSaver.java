@@ -19,6 +19,8 @@ public class TableDataSaver {
 
 	private String header = "Dátum;Jegyszám;Jegyet nyitotta;Technikus neve;Telefonszáma;Standort;Linie;Hibás eset;Jegyet zárta";
 
+	private String failCase = "";
+
 	public void SaveAllData(List<HotlineData> hotlineData, File fileName) {
 
 		try (FileWriter fw = new FileWriter(fileName + ".csv")) {
@@ -32,7 +34,7 @@ public class TableDataSaver {
 
 				String text = date + sep + "SD" + String.valueOf(data.getSdNumber() + sep + data.getOpenedFrom() + sep
 						+ data.getTechnicianName() + sep + data.getPhoneNumber() + sep + data.getLocalizationNumber()
-						+ sep + String.valueOf(data.getLineNumber()) + sep + "" + sep + data.getClosedFrom());
+						+ sep + String.valueOf(data.getLineNumber()) + sep + failCase + sep + data.getClosedFrom());
 
 				fw.write(text + "\n");
 			}
@@ -61,10 +63,10 @@ public class TableDataSaver {
 							.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(Locale.GERMANY));
 
 					String text = date + sep + "SD"
-							+ String.valueOf(
-									data.getSdNumber() + sep + data.getOpenedFrom() + sep + data.getTechnicianName()
-											+ sep + data.getPhoneNumber() + sep + data.getLocalizationNumber() + sep
-											+ String.valueOf(data.getLineNumber()) + sep + data.getClosedFrom());
+							+ String.valueOf(data.getSdNumber() + sep + data.getOpenedFrom() + sep
+									+ data.getTechnicianName() + sep + data.getPhoneNumber() + sep
+									+ data.getLocalizationNumber() + sep + String.valueOf(data.getLineNumber()) + sep
+									+ failCase + sep + data.getClosedFrom());
 
 					fw.write(text + "\n");
 
